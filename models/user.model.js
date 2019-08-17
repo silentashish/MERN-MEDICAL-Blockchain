@@ -25,6 +25,12 @@ let UserSchema = new Schema({
       max: 100
     },
 
+    role: {
+      type: String,
+      required: true,
+      max: 100
+    },
+
     email: {
         type: String,
         trim: true,

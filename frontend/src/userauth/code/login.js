@@ -40,7 +40,8 @@ class Login extends Component{
 
     formData.append('email', this.state.username);   //append the values with key, value pair
     formData.append('password', this.state.password);
-    const URL = 'http://192.168.10.5:3000/users/login';
+    console.log(formData);
+    const URL = 'http://localhost:1038/auth/verify';
     fetch(URL,{
             method: 'POST',
             headers: {
@@ -60,17 +61,11 @@ class Login extends Component{
 
           if(responseJson.status == 'success')
           {
-            if(responseJson.verify == 'no'){
-              this.props.navigation.navigate('verifyuser',{
-                userId:responseJson.userid,
-                token:responseJson.verificationtoken,
-                jwtToken:responseJson.jwttoken,
-                email:this.state.email,
-                password:this.state.password
-              });
+            if(responseJson.data.isVerified == false){
+              this.props.history.push({pathname:'/verifyemail',state:{value:this.state.username}});
             }
 
-            if(responseJson.verify == 'yes'){
+            if(responseJson.data.isVerified == true){
               alert(responseJson.success);
               // (async()=>{
               //   try {
@@ -82,10 +77,7 @@ class Login extends Component{
               //   }
               // })();
 
-              this.props.navigation.navigate('HomeTabNavigator',{
-                userId:responseJson.userid,
-                token:responseJson.verificationtoken
-              });
+              this.props.history.push({pathname:'/add',state:{value:this.state.email}})
             }
           }
           })
@@ -124,7 +116,7 @@ class Login extends Component{
               <Button className='submitbotton' variant="primary" type="submit" onClick={this.handlelogin}>
                 Sign In
               </Button>
-              <h6 className='nextbutton'>New ? Sign Up</h6>
+              <h6 className='nextbutton' onClick={() => this.props.history.push({pathname:'/signup',state:{value:this.state.email}})}>New ? Sign Up</h6>
           </Form>
         </div>
       </div>       

@@ -8,16 +8,147 @@ import "react-datepicker/dist/react-datepicker.css";
 import 'rc-time-picker/assets/index.css';
 import TimePicker from 'rc-time-picker';
 import moment from 'moment';
+import Web3 from 'web3';
+import contracts from 'truffle-contract';
+import path from 'path';
 
 const format = 'h:mm a';
 
 const now = moment().hour(0).minute(0);
 
 
+var provider    = new Web3.providers.HttpProvider("http://localhost:7545");
+var Medical    = require('./Medical.json');
+
+
 class Reservation extends Component{
-  constructor(props){
-    super(props);
+  state = {account: ''}
+  Account = '';
+
+  async loadBlockChain() {
+    const web3 = new Web3(Web3.givenProvider || 'http://localhost:8080')
+    const network = await web3.eth.net.getNetworkType();
+    console.log(network) // should give you main if you're connected to the main network via metamask...
+    const accounts = await web3.eth.getAccounts();
+    this.setState({account: accounts[0]});
+    console.log(accounts[0]);
+    this.Account=accounts[0];
+    web3.eth.defaultAccount = web3.eth.accounts[0]
+    web3.eth.getBalance(this.state.account)
+.then(console.log);
+  }
+
+  async showchain(e){
+    e.preventDefault();
+    const web3 = new Web3(Web3.givenProvider || 'http://localhost:8080')
+    await web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+
+      var proposalsInstance;
+      var value1 = "var";
+      var value2 = "var";
+      var value3 = "var";
+      var value4 = "var";
+      var value5 = "var";
+      var MetaCoinContract = contracts(Medical);
+      MetaCoinContract.setProvider(provider);
+      MetaCoinContract.deployed().then(function(instance){
+        proposalsInstance = instance
+        proposalsInstance.getNumPatients.call().then(function(numProposals) {
+          for (var i=0; i<numProposals; i++) {
+            proposalsInstance.getPatient.call(i).then(function(data) {
+              console.log(data);
+            }).catch(function(err) {
+              console.log("from this "+err.message);
+            });
+          }
+        }).catch(function(err) {
+          console.log("from this"+err.message);
+        });
+    })
+    
+    })
+  }
+
+  async addchain(e){
+    e.preventDefault();
+    const web3 = new Web3(Web3.givenProvider || 'http://localhost:8080')
+    await web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+
+      var proposalInstance;
+      var value1 = "var";
+      var value2 = "var";
+      var value3 = "var";
+      var value4 = "var";
+      var value5 = "var";
+      var MetaCoinContract = contracts(Medical);
+      MetaCoinContract.setProvider(provider);
+      MetaCoinContract.deployed().then(function(instance){
+        proposalInstance = instance;
+          return proposalInstance.addPatient(value1, value2, value3, value4, value5,{from: account});
+      }).then(function(result) {
+        console.log(result);
+        var event = proposalInstance.CreatedPatientEvent();
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    }
+    )}
+
+  async adchain(e) {
+    e.preventDefault();
+    console.log("clicked");
+    var proposalInstance;
+    var value1 = "var";
+    var value2 = "var";
+    var value3 = "var";
+    var value4 = "var";
+    var value5 = "var";
+
+    Web3.eth.getAccounts(function(error, accounts) {
+      if (error) {
+        console.log(error);
+      }
+      var account = accounts[0];
+      contracts.Medical.deployed().then(function(instance) {
+        proposalInstance = instance;
+        return proposalInstance.addPatient(value1, value2, value3, value4, value5);
+      }).then(function(result) {
+        console.log("Result is"+result);
+        var event = proposalInstance.CreatedPatientEvent();
+      }).catch(function(err) {
+        console.log(err.message);
+      });
+    });
+  }
+
+  handleSelect(selectedIndex, e) {
+    this.setState({
+      index: selectedIndex,
+      direction: e.direction,
+    });
+  }
+
+  componentDidMount() {
+    this.loadBlockChain()
+  }
+
+  constructor(props, context){
+    // super(props);
+    super(props, context);
+
+    this.handleSelect = this.handleSelect.bind(this);
+
     this.state = {
+      index: 0,
+      direction: null,
       email:'',
       username:'',
       password: '',
@@ -144,6 +275,9 @@ class Reservation extends Component{
     }
 
   render(){
+
+    const { index, direction } = this.state;
+
     return(
       <div className='container-fluid bg  dev'>
         <div className='bcc dev'>
@@ -261,7 +395,7 @@ class Reservation extends Component{
                 {/* <Form.Group controlId="formBasicChecbox">
                   <Form.Check type="checkbox" label="Remember me" />
                 </Form.Group> */}
-              <Button className='submitbotton' variant="primary" type="submit" onClick={this.handleReserve}>
+              <Button className='submitbotton' variant="primary" type="submit" onClick={(e)=>this.showchain(e)}>
                 Confirm Reservation
               </Button>
                 {/* <h6 className='nextbutton'>Already a member? Login</h6> */}

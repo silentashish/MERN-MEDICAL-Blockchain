@@ -12,8 +12,8 @@ class Signup extends Component{
       isError:false,
       fullname:'',
       confirmpassword:'',
-      branch:'',
-      errorMessage:'Error SomeWhere'
+      role:'',
+      errorMessage:'Error SomeWhere',
     }
 
     //this.getStat = this.getStat.bind(this);
@@ -42,9 +42,12 @@ class Signup extends Component{
     console.log(this.state.username+"   and    "+this.state.password);
     let formData = new FormData();    //formdata object
 
-    formData.append('email', this.state.username);   //append the values with key, value pair
+    formData.append('email', this.state.email);   //append the values with key, value pair
     formData.append('password', this.state.password);
-    const URL = 'http://192.168.10.5:3000/users/login';
+    formData.append('username', this.state.username);
+    formData.append('name', this.state.fullname);
+    formData.append('role', this.state.role);
+    const URL = 'http://localhost:1038/auth/create';
     fetch(URL,{
             method: 'POST',
             headers: {
@@ -64,14 +67,8 @@ class Signup extends Component{
 
           if(responseJson.status == 'success')
           {
-            if(responseJson.verify == 'no'){
-              this.props.navigation.navigate('verifyuser',{
-                userId:responseJson.userid,
-                token:responseJson.verificationtoken,
-                jwtToken:responseJson.jwttoken,
-                email:this.state.email,
-                password:this.state.password
-              });
+            if(responseJson.next == 'verify'){
+              this.props.history.push({pathname:'/verifyemail',state:{value:this.state.email}})
             }
 
             if(responseJson.verify == 'yes'){
@@ -112,6 +109,13 @@ class Signup extends Component{
                 }} />
               </Form.Group>
 
+              <Form.Group controlId="formBasicPassword">
+                <Form.Label>Username</Form.Label>
+                <Form.Control type="text" placeholder="Username" onChange={(event)=> {
+                  this.setState({username: event.target.value,isError:false});
+                }} />
+              </Form.Group>
+
               <Form.Group controlId="formBasicEmail">
                 <Form.Label>Email address</Form.Label>
                 <Form.Control type="email" placeholder="Enter email" onChange={(event)=> {
@@ -138,7 +142,7 @@ class Signup extends Component{
                 <Form.Label>Select Role</Form.Label>
                 <Form.Control as="select" onChange={(event)=> {
                   console.log(event.target.value);
-                  this.setState({branch: event.target.value,isError:false});
+                  this.setState({role: event.target.value,isError:false});
                 }}>
                   <option>Role...</option>
                   <option>Doctor</option>
@@ -154,7 +158,7 @@ class Signup extends Component{
               <Button className='submitbotton' variant="primary" type="submit" onClick={this.handlelogin}>
                 Sign In
               </Button>
-              <h6 className='nextbutton'>Already a member? Login</h6>
+              <h6 className='nextbutton' onClick={() => this.props.history.push({pathname:'/login',state:{value:this.state.email}})}>Already a member? Login</h6>
           </Form>
         </div>
       </div>       

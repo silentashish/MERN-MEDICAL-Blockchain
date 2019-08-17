@@ -9,6 +9,7 @@ import Header from '../static/code/Header';
 import Carousel from '../carousel/code/carousel';
 import Login from '../userauth/code/login';
 import Signup from '../userauth/code/signup';
+import verifyEmail from '../userauth/code/verifyEmail';
 
 import DetailBlog from '../blog/code/detail.blog';
 import ListBlog from '../blog/code/list.blog';
@@ -28,7 +29,7 @@ class Routero extends Component{
     return(
       <Router>
         {/* <Header /> */}
-        <Route  exact path='/' component={Footer,NavbarLower, Carousel} />
+        {/* <Route  exact path='/' component={Footer,NavbarLower, Carousel} /> */}
         <Route  path='/login' component={Login}/>
         <Route  path='/signup' component={Signup}/>
         <Route  path ='/blog/detail' component={DetailBlog}/>
@@ -41,6 +42,7 @@ class Routero extends Component{
         <Route  path ='/site/branch' component={BranchHome}/>
         <Route  path ='/menu/detail' component={MenuDetail}/>
         <Route  path ='/add' component={Reservation}/>
+        <Route  path ='/verifyemail' component={verifyEmail}/>
         {/* <Footer/> */}
       </Router>
     );
