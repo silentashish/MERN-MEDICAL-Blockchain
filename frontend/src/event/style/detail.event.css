@@ -1,0 +1,20 @@
+.myimage {
+    /* display: block;   
+    margin: 0 auto; */
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    max-width: 100%;
+    height: auto;
+    
+}
+
+.pos{
+    /* background-color: azure; */
+    text-align: center;
+    margin-top: 2rem;
+
+}
+
+.posi{
+    text-align: left;
+}

@@ -1,0 +1,34 @@
+.listBucket{
+    margin-bottom: 5%;
+    height: 450px;
+    background-color: azure;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 1);
+    width: 100%;
+}
+
+.bglist {
+    width: 50%;
+    background-color: orange;
+    background-image: url('../../Img/food.jpg');
+    height: 100%;     
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.mm{
+    padding: 1rem;
+    height: 100%;
+    text-align: center;
+    
+}
+
+.more{
+    color: red;
+    text-decoration: underline;
+}
+
+html, body {
+    overflow: auto;
+}
+    

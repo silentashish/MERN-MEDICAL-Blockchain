@@ -1,0 +1,41 @@
+.all{
+  height: 100%;
+  width: 100%;
+  background-color: lightblue;
+}
+
+.bg {
+  /* The image used */
+  background-image: url('../../Img/food.jpg');
+
+  /* Full height */
+  height: 100%; 
+
+  /* Center and scale the image nicely */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.box{
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 1);
+  border-radius: 1rem;
+  padding: 2rem;
+  background-color:rgba(255, 255, 255, .7); 
+  margin: 0;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn-primary{
+  width:100%;
+}
+
+.nextbutton{
+  padding: 0.5rem;
+  background-color: transparent;
+  width: 100%;
+  text-align: center;
+}
