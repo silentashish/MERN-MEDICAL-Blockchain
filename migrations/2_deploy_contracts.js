@@ -1,4 +1,4 @@
-const Medical = artifacts.require("Medical");
+const Medical = artifacts.require("MedicalRecord");
 
 module.exports = function(deployer) {
   deployer.deploy(Medical);

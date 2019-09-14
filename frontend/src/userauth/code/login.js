@@ -76,8 +76,23 @@ class Login extends Component{
               //     console.log(e);
               //   }
               // })();
+              console.log(responseJson);
+              if(responseJson.data.role=='Medical Assistant'){
+                this.props.history.push({pathname:'/person',state:{value:this.state.email}})
 
-              this.props.history.push({pathname:'/add',state:{value:this.state.email}})
+              }
+
+              if(responseJson.data.role=='Doctor'){
+                this.props.history.push({pathname:'/add',state:{value:this.state.email}})
+
+              }
+
+              if(responseJson.data.role=='Patient'){
+                this.props.history.push({pathname:'/patient',state:{value:this.state.email}})
+
+              }
+
+              
             }
           }
           })

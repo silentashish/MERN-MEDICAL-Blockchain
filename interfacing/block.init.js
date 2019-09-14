@@ -1,7 +1,7 @@
 var Web3        = require('web3'),
     contract    = require("truffle-contract"),
     path        = require('path')
-    Medical    = require(path.join(__dirname, '../build/contracts/Medical.json'));
+    Medical    = require(path.join(__dirname, '../build/contracts/MedicalRecord.json'));
 
     
 var provider    = new Web3.providers.HttpProvider("http://localhost:7545"),    

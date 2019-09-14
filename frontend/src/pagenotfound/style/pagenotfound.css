@@ -1,0 +1,19 @@
+#pgnt{
+    margin-top: 25px;
+    color: black;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-align: center;
+}
+
+#pgntimg{
+    height: 100px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#pgnthome{
+    text-align: center;
+    color: blue;
+    text-decoration: underline;
+}

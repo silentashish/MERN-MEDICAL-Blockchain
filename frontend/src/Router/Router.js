@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Link , Switch } from "react-router-dom";
 
 
 import NavbarUpper from '../static/code/navbar.upper';
@@ -17,33 +17,52 @@ import DetailEvent from '../event/code/detail.event';
 import ListEvent from '../event/code/list.event';
 import DetailCareer from '../career/code/detail.career';
 import ListCareer from '../career/code/list.career';
-import BranchHome from '../home/code/branch.home';
 import SiteHome from '../home/code/site.home';
 import MenuDetail from '../menu/code/detail.menu';
 import Reservation from '../reservation/code/detail.reservation';
-
+import pagenotfound from '../pagenotfound/code/pagenotfound';
+import MedicalPerson from '../medicalperson/code/medical.add';
+import MedicalProblem from '../PatientWork/code/medical.problem';
+import CreateMedication from '../DoctorWork/code/create.medication';
+import CreatePatientIssue from '../DoctorWork/code/create.PatientIssue';
+import PrescribeMedication from '../DoctorWork/code/prescribe.medication';
+import ShareMedication from '../DoctorWork/code/share.Medication';
+import Patient from '../reservation/code/patient.home';
 
 
 class Routero extends Component{
   render(){
     return(
       <Router>
-        {/* <Header /> */}
-        {/* <Route  exact path='/' component={Footer,NavbarLower, Carousel} /> */}
-        <Route  path='/login' component={Login}/>
-        <Route  path='/signup' component={Signup}/>
-        <Route  path ='/blog/detail' component={DetailBlog}/>
-        <Route  path ='/blog/list' component={ListBlog}/>
-        <Route  path ='/event/detail' component={DetailEvent}/>
-        <Route  path ='/event/list' component={ListEvent}/>
-        <Route  path ='/career/detail' component={DetailCareer}/>
-        <Route  path ='/career/list' component={ListCareer}/>
-        <Route  path ='/home' component={SiteHome}/>
-        <Route  path ='/site/branch' component={BranchHome}/>
-        <Route  path ='/menu/detail' component={MenuDetail}/>
-        <Route  path ='/add' component={Reservation}/>
-        <Route  path ='/verifyemail' component={verifyEmail}/>
-        {/* <Footer/> */}
+        <Switch>
+          {/* <Header /> */}
+          {/* <Route  exact path='/' component={Footer,NavbarLower, Carousel} /> */}
+          <Route  path='/login' component={Login}/>
+          <Route  path='/signup' component={Signup}/>
+          <Route  path ='/person' component={MedicalPerson} />
+          <Route  path = '/createmedication' component={CreateMedication}/>
+          <Route  path = '/createpatientissue' component={CreatePatientIssue}/>
+          <Route  path ='/addproblem' component={MedicalProblem} />
+          <Route  path ='/prescribemedication' component={PrescribeMedication} />
+          <Route  path ='/sharemedication' component={ShareMedication} />
+          <Route  path ='/blog/detail' component={DetailBlog}/>
+          <Route  path ='/blog/list' component={ListBlog}/>
+          <Route  path ='/event/detail' component={DetailEvent}/>
+          <Route  path ='/event/list' component={ListEvent}/>
+          <Route  path ='/career/detail' component={DetailCareer}/>
+          <Route  path ='/career/list' component={ListCareer}/>
+          <Route  path ='/home' component={SiteHome}/>
+          <Route  path ='/menu/detail' component={MenuDetail}/>
+          <Route  path ='/add' component={Reservation}/>
+          <Route  path ='/patient' component={Patient} />
+          <Route  path ='/verifyemail' component={verifyEmail}/>
+          <Route  path ='/' exact component={SiteHome}/>
+          <Route  path ='*' component={pagenotfound} />
+          
+
+          
+          {/* <Footer/> */}
+        </Switch>
       </Router>
     );
   }

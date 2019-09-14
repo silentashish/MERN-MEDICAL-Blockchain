@@ -25,7 +25,7 @@ exports.user_create = function(req, res){
         role:req.body.role
       }
     );
-
+    console.log(newuser, 'newuser');
     newuser.save(function(err){
       if(err){
         res.send({"err":err});

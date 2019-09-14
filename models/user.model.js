@@ -13,7 +13,7 @@ var validateEmail = function(email) {
 let UserSchema = new Schema({
     username: {
       type: String,
-      unique: true,
+      // unique: true,
       lowercase: true ,
       max: 20,
       required: 'Username is required',

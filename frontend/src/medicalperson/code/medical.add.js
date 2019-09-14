@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {Form,Button,Row, Card,Col} from 'react-bootstrap';
-import '../style/reservation.css';
+import '../style/medical.add.css';
 import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import DatePicker from "react-datepicker";
@@ -21,7 +21,7 @@ var provider    = new Web3.providers.HttpProvider("http://localhost:7545");
 var Medical    = require('../../Ajson/MedicalRecord.json');
 
 
-class Reservation extends Component{
+class MedicalPerson extends Component{
   state = {account: ''}
   Account = '';
 
@@ -38,43 +38,21 @@ class Reservation extends Component{
 .then(console.log);
   }
 
-  async showchain(e){
-    e.preventDefault();
-    const web3 = new Web3(Web3.givenProvider || 'http://localhost:8080')
-    await web3.eth.getAccounts(function(error, accounts) {
-      if (error) {
-        console.log(error);
-      }
-      var account = accounts[0];
-
-      var proposalsInstance;
-      var value1 = "var";
-      var value2 = "var";
-      var value3 = "var";
-      var value4 = "var";
-      var value5 = "var";
-      var MetaCoinContract = contracts(Medical);
-      MetaCoinContract.setProvider(provider);
-      MetaCoinContract.deployed().then(function(instance){
-        proposalsInstance = instance
-        proposalsInstance.getNumPatients.call().then(function(numProposals) {
-          for (var i=0; i<numProposals; i++) {
-            proposalsInstance.getPatient.call(i).then(function(data) {
-              console.log(data);
-            }).catch(function(err) {
-              console.log("from this "+err.message);
-            });
-          }
-        }).catch(function(err) {
-          console.log("from this"+err.message);
-        });
-    })
-    
-    })
-  }
-
   async addchain(e){
+    var value;
+    var location;
     e.preventDefault();
+    
+    if (this.state.branch =='Doctor'){
+        value = '0';
+    }
+
+    if (this.state.branch =='Patient'){
+        value = '1';
+    }
+    location=this.state.location;
+    // console.log("value are"+this.state.location+" "+value);
+    
     const web3 = new Web3(Web3.givenProvider || 'http://localhost:8080')
     await web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -88,8 +66,14 @@ class Reservation extends Component{
       MetaCoinContract.setProvider(provider);
       MetaCoinContract.deployed().then(function(instance){
         proposalInstance = instance;
-          return proposalInstance.registerCandidate("0xb1619F11827C4e7234FF54AB5cEa85Fd91329319","0",{from: accounts[0]});
+          return proposalInstance.registerCandidate(location,value,{from: accounts[0]});
       }).then(function(result) {
+        Swal.fire({
+            title: 'User is Added!',
+            text: 'Do you want to continue',
+            type: 'success',
+            confirmButtonText: 'Yes'
+          })
         console.log(result);
       }).catch(function(err) {
         console.log("from this"+err.message);
@@ -131,20 +115,9 @@ class Reservation extends Component{
 
     //this.getStat = this.getStat.bind(this);
     this.login = this.login.bind(this);
-    this.handleReserve = this.handleReserve.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleReserve = (e) => {
-    //this.props.history.push("/home");
-    e.preventDefault();
-    Swal.fire({
-          title: 'Reservation Added!',
-          text: 'Do you want to continue',
-          type: 'success',
-          confirmButtonText: 'Yes'
-        })
-  };
 
   onChange = time => this.setState({ time })
 
@@ -187,34 +160,54 @@ class Reservation extends Component{
       <div className='container-fluid bg  dev'>
         <div className='bcc dev'>
           <div className='row ro dev'>
-            <div className='col-md-12 col-sm-12 dev'>
+            <div className='col-md-6 col-sm-12 dev'>
               <div className='bc dev'>
                 <div className='intro dev'>
-                  <div className='flex-container'>
-                      <div onClick={()=>this.props.history.push("/createmedication")}>
-                        <img className='inim' src={require('../../Img/pill.png')} />
-                        <br></br>
-                        <br></br>
-                        <h5>Create Medication</h5>
-                      </div>
+                  <h1 id='name'>ADD MEDICAL RECORD</h1>
+                  <span id='quoto'>
+                  " With tens of thousands of patients dying every year from preventable medical errors, it is imperative that we embrace available technologies and drastically improve the way medical records are handled and processed. "
+                  </span>
 
-                      <div onClick={()=>this.props.history.push("/createpatientissue")}> 
-                        <img className='inim' src={require('../../Img/healthcare.png')} />
-                        <br></br>
-                        <br></br>
-                        <h5>Create Patient Issue</h5>
-                      </div>
-
-                      <div onClick={()=>this.props.history.push("/prescribemedication")}> 
-                        <img className='inim' src={require('../../Img/analysis.png')} />
-                        <br></br>
-                        <br></br>
-                        <h5>Prescribe Medication </h5>
-                      </div>
-
-                  </div>
+                  <br></br>
+                  <span id="writer">Jon Porter</span>
 
                 </div>
+
+              </div>
+
+            </div>
+
+            <div className='col-md-6 col-sm-12 dev'>
+              <div className='bc dev'>
+              <div bg className='boxe dev' >
+            <Form className="reserveform">
+              <Form.Group controlId="formBasicPassword">
+                <Form.Label>Enter Address</Form.Label>
+                <Form.Control type="text" placeholder="Enter your address" onChange={(event)=> {
+                  this.setState({location: event.target.value,isError:false});
+                }} />
+              </Form.Group>
+
+
+              <Form.Group controlId="formGridState">
+                <Form.Label>Select Branch</Form.Label>
+                <Form.Control as="select" onChange={(event)=> {
+                  console.log(event.target.value);
+                  this.setState({branch: event.target.value,isError:false});
+                }}>
+                  <option>Role</option>
+                  <option>Doctor</option>
+                  <option>Patient </option>
+                </Form.Control>
+              </Form.Group>
+
+              <Button className='submitbotton' variant="primary" type="/submit" onClick={(e)=>this.addchain(e)}>
+                ADD NEW USER
+              </Button>
+                {/* <h6 className='nextbutton'>Already a member? Login</h6> */}
+            </Form>
+          </div>
+
               </div>
             </div>
           </div>
@@ -225,4 +218,4 @@ class Reservation extends Component{
   }
 }
 
-export default Reservation;
+export default MedicalPerson;

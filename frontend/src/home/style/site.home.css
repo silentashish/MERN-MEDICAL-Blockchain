@@ -1,0 +1,50 @@
+#one{
+    background: red;
+    height: 20%;
+}
+
+#two{
+    background: blue;
+    height: 20%;
+}
+
+.color{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    height: 500px;
+    width: 100%;
+    background:#D9D9D9;
+}
+
+.color > div{
+    color: #4484CE;
+    padding: 50px;
+    align-self: center;
+    height: 100;
+    width: 50%;
+    text-align: center;
+}
+
+.colornx{
+    height: 500px;
+    width: 100%;
+    background:#4484CE;
+}
+
+.colorex{
+    height: 500px;
+    width: 100%;
+    background:#F9CF00;
+}
+
+.colorlx{
+    height: 500px;
+    width: 100%;
+    background:#F19FAD;
+}
+
+.imagehere{
+    height: 400px;
+    width: 400px;
+}

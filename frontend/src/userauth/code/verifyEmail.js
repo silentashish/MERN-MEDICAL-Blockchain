@@ -6,6 +6,7 @@ class Login extends Component{
 
   constructor(props){
     super(props);
+    console.log(props);
     this.state = {
       username:'',
       password: '',
@@ -63,28 +64,7 @@ class Login extends Component{
 
           if(responseJson.status == 'success')
           {
-            if(responseJson.verify == 'no'){
-              console.log('done');
-              this.props.history.push({pathname:'/add',state:{value:this.state.email}})
-            }
-
-            if(responseJson.verify == 'yes'){
-              alert(responseJson.success);
-              // (async()=>{
-              //   try {
-              //     await AsyncStorage.setItem('userid', responseJson.userid);
-              //     await AsyncStorage.setItem('jwttoken', responseJson.jwttoken);
-              //   } catch (e) {
-              //     // saving error
-              //     console.log(e);
-              //   }
-              // })();
-
-              this.props.navigation.navigate('HomeTabNavigator',{
-                userId:responseJson.userid,
-                token:responseJson.verificationtoken
-              });
-            }
+            this.props.history.push({pathname:'/login',state:{value:this.state.email}})
           }
           })
         .catch((error) =>{

@@ -147,6 +147,7 @@ class Signup extends Component{
                   <option>Role...</option>
                   <option>Doctor</option>
                   <option>Patient</option>
+                  <option>Medical Assistant</option>
                 </Form.Control>
               </Form.Group>
 

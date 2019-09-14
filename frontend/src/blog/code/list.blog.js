@@ -26,7 +26,7 @@ class GridView extends Component{
           <p className='name'>14 june 2019</p>
           <br></br>
           <h4 className='header'><b>{this.props.children}</b></h4> 
-          <text className='contain'>" Brace yourself your dream girl and supermodel sunny is now in the town make yourself brown ...</text> 
+          <text className='contain'>" Brace yourself your dream girl is now in the town make yourself brown ...</text> 
           <text className='readmore'> Read More </text>
         </div>
       </div>

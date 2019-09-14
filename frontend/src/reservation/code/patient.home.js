@@ -191,25 +191,18 @@ class Reservation extends Component{
               <div className='bc dev'>
                 <div className='intro dev'>
                   <div className='flex-container'>
-                      <div onClick={()=>this.props.history.push("/createmedication")}>
+                      <div onClick={()=>this.props.history.push("/addproblem")}>
                         <img className='inim' src={require('../../Img/pill.png')} />
                         <br></br>
                         <br></br>
-                        <h5>Create Medication</h5>
+                        <h5>Add Medical Problem</h5>
                       </div>
 
-                      <div onClick={()=>this.props.history.push("/createpatientissue")}> 
+                      <div onClick={()=>this.props.history.push("/sharemedication")}> 
                         <img className='inim' src={require('../../Img/healthcare.png')} />
                         <br></br>
                         <br></br>
-                        <h5>Create Patient Issue</h5>
-                      </div>
-
-                      <div onClick={()=>this.props.history.push("/prescribemedication")}> 
-                        <img className='inim' src={require('../../Img/analysis.png')} />
-                        <br></br>
-                        <br></br>
-                        <h5>Prescribe Medication </h5>
+                        <h5>Share Medication</h5>
                       </div>
 
                   </div>
