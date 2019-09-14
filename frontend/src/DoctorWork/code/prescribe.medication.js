@@ -60,7 +60,7 @@ class MedicalPerson extends Component{
       MetaCoinContract.setProvider(provider);
       MetaCoinContract.deployed().then(function(instance){
         proposalInstance = instance;
-          return proposalInstance.prescribeMedication(location,id,{from:"0xeb80652D6770084fDC4BD37e2c45bdbB9E1AdbaF" });
+          return proposalInstance.prescribeMedication(location,id,{from:account });
       }).then(function(result) {
         Swal.fire({
             title: 'User is Added!',

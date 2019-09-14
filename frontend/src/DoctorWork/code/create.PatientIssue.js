@@ -41,6 +41,7 @@ class MedicalPerson extends Component{
   async addchain(e){
     var value;
     var location;
+    var doctor = this.state.doctoraddress;
     e.preventDefault();
     
     location=this.state.location;
@@ -60,7 +61,7 @@ class MedicalPerson extends Component{
       MetaCoinContract.setProvider(provider);
       MetaCoinContract.deployed().then(function(instance){
         proposalInstance = instance;
-          return proposalInstance.createPatientIssue(location,id,{from:"0xeb80652D6770084fDC4BD37e2c45bdbB9E1AdbaF" });
+          return proposalInstance.createPatientIssue(location,id,{from:account });
       }).then(function(result) {
         Swal.fire({
             title: 'User is Added!',

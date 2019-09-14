@@ -36,7 +36,7 @@ class Reservation extends Component{
     console.log(network) // should give you main if you're connected to the main network via metamask...
     const accounts = await web3.eth.getAccounts();
     this.setState({account: accounts[0]});
-    console.log(accounts[0]);
+    console.log("this is"+accounts[0]);
     this.Account=accounts[0];
     web3.eth.defaultAccount = web3.eth.accounts[0]
     web3.eth.getBalance(this.state.account)

@@ -45,6 +45,7 @@ class CreateMedication extends Component{
 
   async addchain(e){
     var d = this.state.address;
+    var doctor = this.state.doctoraddress;
     e.preventDefault();
     console.log(this.state.startdate+" " +" "+this.state.enddate+" "+this.state.dosage+" "+this.state.hospital+" "+ this.state.referby+" "+" "+this.state.id);
     var startdate=Date.parse(this.state.startdate);
@@ -65,7 +66,7 @@ class CreateMedication extends Component{
       MetaCoinContract.setProvider(provider);
       MetaCoinContract.deployed().then(function(instance){
         proposalInstance = instance;
-          return proposalInstance.createMedication(startdate,enddate,dosage,referby,hospitalname,id,{from: "0xeb80652D6770084fDC4BD37e2c45bdbB9E1AdbaF"});
+          return proposalInstance.createMedication(startdate,enddate,dosage,referby,hospitalname,id,{from: account});
       }).then(function(result) {
         console.log(result);
         Swal.fire({
