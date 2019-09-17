@@ -59,14 +59,14 @@ class Login extends Component{
             });
           }
 
-          if(responseJson.status == 'success')
+          if(responseJson.status === 'success')
           {
-            if(responseJson.data.isVerified == false){
+            if(responseJson.data.isVerified === false){
               this.props.history.push({pathname:'/verifyemail',state:{value:this.state.username}});
             }
 
-            if(responseJson.data.isVerified == true){
-              alert(responseJson.success);
+            if(responseJson.data.isVerified === true){
+              console.log('response json: ', responseJson);
               // (async()=>{
               //   try {
               //     await AsyncStorage.setItem('userid', responseJson.userid);
@@ -77,17 +77,17 @@ class Login extends Component{
               //   }
               // })();
               console.log(responseJson);
-              if(responseJson.data.role=='Medical Assistant'){
+              if(responseJson.data.role==='Medical Assistant'){
                 this.props.history.push({pathname:'/person',state:{value:this.state.email}})
 
               }
 
-              if(responseJson.data.role=='Doctor'){
+              if(responseJson.data.role==='Doctor'){
                 this.props.history.push({pathname:'/add',state:{value:this.state.email}})
 
               }
 
-              if(responseJson.data.role=='Patient'){
+              if(responseJson.data.role==='Patient'){
                 this.props.history.push({pathname:'/patient',state:{value:this.state.email}})
 
               }

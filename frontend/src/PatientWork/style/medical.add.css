@@ -122,6 +122,21 @@ text-align: center;
   background-size: cover;
 }
 
+.intro2 {
+  padding: 20px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, .7);
+  border-radius: 2em;
+  /* background-image: url('../../Img/waiternew.png'); */
+
+  height: 100%;
+
+
+  /* background-position: center; */
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 #name{
   margin-top: 10%;
   margin-bottom: 10%;
