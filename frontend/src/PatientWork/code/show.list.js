@@ -11,15 +11,67 @@ import moment from 'moment';
 import Web3 from 'web3';
 import contracts from 'truffle-contract';
 import path from 'path';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 
 const format = 'h:mm a';
 
 const now = moment().hour(0).minute(0);
 
-
+const styles = {
+  tablePanel: {
+    'overflow-y': 'scroll',
+    height: '200px',
+  },
+};
 var provider    = new Web3.providers.HttpProvider("http://localhost:7545");
 var Medical    = require('../../Ajson/MedicalRecord.json');
-
+const products = [
+  {
+    id: 1,
+    name: "Product1",
+    price: 120
+  }, {
+    id: 2,
+    name: "Product2",
+    price: 80
+  }, {
+    id: 3,
+    name: "Product3",
+    price: 80
+  }, {
+    id: 4,
+    name: "Product4",
+    price: 80
+  }, {
+    id: 5,
+    name: "Product5",
+    price: 80
+  }, {
+    id: 6,
+    name: "Product6",
+    price: 80
+  }, {
+    id: 7,
+    name: "Product7",
+    price: 80
+  }, {
+    id: 2,
+    name: "Product2",
+    price: 80
+  }, {
+    id: 2,
+    name: "Product2",
+    price: 80
+  }, {
+    id: 2,
+    name: "Product2",
+    price: 80
+  }, {
+    id: 2,
+    name: "Product2",
+    price: 80
+  }
+]
 
 class MedicalPerson extends Component{
   state = {account: ''}
@@ -151,9 +203,9 @@ class MedicalPerson extends Component{
     const { index, direction } = this.state;
 
     return(
-      <div className='container-fluid bg  dev'>
-        <div className='bcc dev'>
-          <div className='row ro dev'>
+      <div className='container-fluid bg'>
+        {/* <div className='bcc dev'> */}
+          {/* <div className='row ro dev'> */}
             {/* <div className='col-md-6 col-sm-12 dev'>
               <div className='bc dev'>
                 <div className='intro dev'>
@@ -174,13 +226,41 @@ class MedicalPerson extends Component{
             <div className='col-md-12 col-sm-12 dev'>
               <div className='bc dev'>
                 <div bg className='intro2 dev' >
-                
+                  <h2>MEDICATIONS</h2>
+                  <div style={styles.tablePanel}>
+                    <div>
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <BootstrapTable data={ products } table striped hover>
+                            <TableHeaderColumn dataField='id' isKey={ true }>Product ID</TableHeaderColumn>
+                            <TableHeaderColumn dataField='name'>Product Name</TableHeaderColumn>
+                            <TableHeaderColumn dataField='price'>Product Price</TableHeaderColumn>
+                        </BootstrapTable>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <br />
+                  <h2>ISSUE LIST</h2>
+                  <div style={styles.tablePanel}>
+                    <div>
+                      <div class="panel panel-default">
+                        <div class="panel-body">
+                          <BootstrapTable data={ products } table striped hover>
+                            <TableHeaderColumn dataField='id' isKey={ true }>Product ID</TableHeaderColumn>
+                            <TableHeaderColumn dataField='name'>Product Name</TableHeaderColumn>
+                            <TableHeaderColumn dataField='price'>Product Price</TableHeaderColumn>
+                        </BootstrapTable>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
               </div>
             </div>
-          </div>
-        </div>
+          {/* </div> */}
+        {/* </div> */}
       </div>
         
     )
