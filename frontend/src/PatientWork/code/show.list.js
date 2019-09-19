@@ -90,6 +90,16 @@ class ShowList extends Component{
 .then(console.log);
   }
 
+  async showMedication() {
+    const web3 = new Web3(Web3.givenProvider || 'http://localhost:8080')
+    const web3.eth.getAccounts((error, accounts) => {
+      if (error) {
+        console.log(`Error: ${error} from account ${accounts}`);
+      }
+      let account = accounts[0];
+      let MetaCoinContract = contracts(Medical);
+    });
+  }
   async addchain(e){
     var value;
     var location;
