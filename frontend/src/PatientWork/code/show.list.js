@@ -73,8 +73,8 @@ const products = [
   }
 ]
 
-class MedicalPerson extends Component{
-  state = {account: ''}
+class ShowList extends Component{
+  state = { account: '' }
   Account = '';
 
   async loadBlockChain() {
@@ -204,25 +204,6 @@ class MedicalPerson extends Component{
 
     return(
       <div className='container-fluid bg'>
-        {/* <div className='bcc dev'> */}
-          {/* <div className='row ro dev'> */}
-            {/* <div className='col-md-6 col-sm-12 dev'>
-              <div className='bc dev'>
-                <div className='intro dev'>
-                  <h1 id='name'>Share Medication</h1>
-                  <span id='quoto'>
-                  " With tens of thousands of patients dying every year from preventable medical errors, it is imperative that we embrace available technologies and drastically improve the way medical records are handled and processed. "
-                  </span>
-
-                  <br></br>
-                  <span id="writer">Jon Porter</span>
-
-                </div>
-
-              </div>
-
-            </div> */}
-
             <div className='col-md-12 col-sm-12 dev'>
               <div className='bc dev'>
                 <div bg className='intro2 dev' >
@@ -267,4 +248,4 @@ class MedicalPerson extends Component{
   }
 }
 
-export default MedicalPerson;
+export default ShowList;
