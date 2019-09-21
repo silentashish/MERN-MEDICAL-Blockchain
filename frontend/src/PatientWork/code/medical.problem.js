@@ -67,11 +67,11 @@ class Reservation extends Component{
       MetaCoinContract.setProvider(provider);
       MetaCoinContract.deployed().then(function(instance){
         proposalInstance = instance;
-          return proposalInstance.createMedicalProblem(title,startdate,enddate,occurance,severity,referby,isallergy,address,{from: d});
+          return proposalInstance.createMedicalProblem(title,startdate,enddate,occurance,severity,referby,isallergy,address,{from: account});
       }).then(function(result) {
         console.log(result);
         Swal.fire({
-          title: 'Reservation Added!',
+          title: `Submitted issue to doctor`,
           text: 'Do you want to continue',
           type: 'success',
           confirmButtonText: 'Yes'
