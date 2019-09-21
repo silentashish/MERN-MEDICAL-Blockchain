@@ -70,7 +70,7 @@ class CreateMedication extends Component{
       }).then(function(result) {
         console.log(result);
         Swal.fire({
-          title: 'Reservation Added!',
+          title: 'Medication Added!',
           text: 'Do you want to continue',
           type: 'success',
           confirmButtonText: 'Yes'
