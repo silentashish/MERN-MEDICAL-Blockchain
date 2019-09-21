@@ -22,7 +22,11 @@ var Medical    = require('../../Ajson/MedicalRecord.json');
 
 
 class Reservation extends Component{
-  state = {account: ''}
+  state = {
+    account: '',
+    currCandidateAddress: '',
+    currCandidateType: ''
+  }
   Account = '';
 
   async loadBlockChain() {
@@ -73,6 +77,30 @@ class Reservation extends Component{
     })
   }
 
+  async setTitle() {
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum);
+      await window.ethereum.enable();
+    } else if (window.web3) {
+      window.web3 = new Web3(window.web3.currentProvider);
+    } else {
+      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!');
+    }
+
+    const accounts = await window.web3.eth.getAccounts();
+    const networkId = await window.web3.eth.net.getId();
+    const networkData = Medical.networks[networkId];
+
+    if (networkData) {
+      const medical = new window.web3.eth.Contract(Medical.abi, networkData.address);
+      const currentCandidate = await medical.methods.getCandidateByAddress(accounts[0]).call();
+      this.setState({
+        currCandidateAddress: currentCandidate[0],
+        currCandidateType: currentCandidate[1]
+      });
+    }
+  }
+
   async addchain(e){
     e.preventDefault();
     const web3 = new Web3(Web3.givenProvider || 'http://localhost:8080')
@@ -106,6 +134,7 @@ class Reservation extends Component{
 
   componentDidMount() {
     this.loadBlockChain()
+    this.setTitle()
   }
 
   constructor(props, context){
@@ -180,8 +209,8 @@ class Reservation extends Component{
   }
 
   render(){
-
-    const { index, direction } = this.state;
+    const { currCandidateAddress, currCandidateType } = this.state;
+    const headerLabel = `You are ${currCandidateType} [${currCandidateAddress}]`;
 
     return(
       <div className='container-fluid bg  dev'>
@@ -190,6 +219,7 @@ class Reservation extends Component{
             <div className='col-md-12 col-sm-12 dev'>
               <div className='bc dev'>
                 <div className='intro dev'>
+                  <div><h3 style={{ color: '#fff' }}>{currCandidateAddress ? headerLabel : ''}</h3></div>
                   <div className='flex-container'>
                       <div onClick={()=>this.props.history.push("/addproblem")}>
                         <img className='inim' src={require('../../Img/pill.png')} />
@@ -219,9 +249,8 @@ class Reservation extends Component{
             </div>
           </div>
         </div>
-      </div>
-        
-    )
+      </div>  
+    );
   }
 }
 
