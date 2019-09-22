@@ -11,13 +11,14 @@ const styles = {
   tablePanel: {
     'overflowY': 'scroll',
     height: '200px',
-  },
+  }
 };
 
-export default class ShowList extends Component{
+class ViewMedicationList extends Component{
   state = {
     medicalIssue: [],
     medications: [],
+    selectedRow: {},
     isRowSelected: false
   };
   
@@ -46,9 +47,9 @@ export default class ShowList extends Component{
 
     if (networkData) {
       const medical = new web3.eth.Contract(Medical.abi, networkData.address);
-      const patientMedicalProblems = await medical.methods.getMedicalProblemsByAddress(accounts[0]).call();
-      const patientMedications = await medical.methods.getMedicationsByAddress(accounts[0]).call();
-
+      const patientMedicalProblems = await medical.methods.getPatientMedicalProblemsByAddress(accounts[0]).call();
+      const patientMedications = await medical.methods.getPatientMedicationsByAddress(accounts[0]).call();
+      console.log(patientMedications);
       let medicalIssue = [];
       for(let i = 0; i < patientMedicalProblems.length; i++) {
         medicalIssue.push({
@@ -56,7 +57,8 @@ export default class ShowList extends Component{
           title: patientMedicalProblems[i].title,
           type: patientMedicalProblems[i].isAllergyType === true ? 'Allergy': '',
           startDate: `${new Date(Number(patientMedicalProblems[i].beginDate)).getMonth()}/${new Date(Number(patientMedicalProblems[i].beginDate)).getDate()}/${new Date(Number(patientMedicalProblems[i].beginDate)).getFullYear()}`,
-          endDate: `${new Date(Number(patientMedicalProblems[i].endDate)).getMonth()}/${new Date(Number(patientMedicalProblems[i].endDate)).getDate()}/${new Date(Number(patientMedicalProblems[i].endDate)).getFullYear()}`
+          endDate: `${new Date(Number(patientMedicalProblems[i].endDate)).getMonth()}/${new Date(Number(patientMedicalProblems[i].endDate)).getDate()}/${new Date(Number(patientMedicalProblems[i].endDate)).getFullYear()}`,
+          patientAddress: patientMedicalProblems[i].patientAddress
         });
       }
 
@@ -68,8 +70,7 @@ export default class ShowList extends Component{
           dosage: patientMedications[i].dosage,
           startDate: `${new Date(Number(patientMedications[i].beginDate)).getMonth()}/${new Date(Number(patientMedications[i].beginDate)).getDate()}/${new Date(Number(patientMedications[i].beginDate)).getFullYear()}`,
           endDate: `${new Date(Number(patientMedications[i].endDate)).getMonth()}/${new Date(Number(patientMedications[i].endDate)).getDate()}/${new Date(Number(patientMedications[i].endDate)).getFullYear()}`,
-          referrer: patientMedications[i].referredBy,
-          doctorAddresses: patientMedications[i].candidateAddress
+          referrer: patientMedications[i].referredBy
         });
       }
       this.setState({ medications, medicalIssue });
@@ -84,12 +85,7 @@ export default class ShowList extends Component{
       bgColor: '#fff', // you should give a bgcolor, otherwise, you can't regonize which row has been selected
       onSelect: this.onRowSelect
     };
-    const {
-      medications,
-      medicalIssue,
-      selectedRow,
-      isRowSelected
-    } = this.state;
+    const { medications, medicalIssue } = this.state;
     return(
       <div className='container-fluid bg'>
             <div className='col-md-12 col-sm-12 dev'>
@@ -100,14 +96,31 @@ export default class ShowList extends Component{
                     <div>
                       <div className="panel panel-default">
                         <div className="panel-body">
-                          <BootstrapTable data={ medications } selectRow={ selectRowProp }>
+                          <BootstrapTable data={ medications } table striped hover>
                             <TableHeaderColumn dataField='id' isKey={ true }>ID</TableHeaderColumn>
                             <TableHeaderColumn dataField='drug'>Drug</TableHeaderColumn>
                             <TableHeaderColumn dataField='dosage'>Dosage</TableHeaderColumn>
                             <TableHeaderColumn dataField='startDate'>Start date</TableHeaderColumn>
                             <TableHeaderColumn dataField='endDate'>End date</TableHeaderColumn>
                             <TableHeaderColumn dataField='referrer'>Referrer</TableHeaderColumn>
-                            <TableHeaderColumn dataField='doctorAddresses' hidden>Doctor</TableHeaderColumn>
+                        </BootstrapTable>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <br />
+                  <h2>ISSUE LIST</h2>
+                  <div style={styles.tablePanel}>
+                    <div>
+                      <div className="panel panel-default">
+                        <div className="panel-body">
+                          <BootstrapTable data={ medicalIssue } selectRow={ selectRowProp }>
+                            <TableHeaderColumn dataField='id' isKey={ true }>ID</TableHeaderColumn>
+                            <TableHeaderColumn dataField='title'>Title</TableHeaderColumn>
+                            <TableHeaderColumn dataField='type'>Type</TableHeaderColumn>
+                            <TableHeaderColumn dataField='startDate'>Start date</TableHeaderColumn>
+                            <TableHeaderColumn dataField='endDate'>End date</TableHeaderColumn>
+                            <TableHeaderColumn dataField='patientAddress' hidden>Patient</TableHeaderColumn>
                         </BootstrapTable>
                         </div>
                       </div>
@@ -117,29 +130,12 @@ export default class ShowList extends Component{
                     <button
                       type="button"
                       className="btn btn-secondary"
-                      disabled={!isRowSelected}
+                      disabled={!this.state.isRowSelected}
                       onClick={() => {
-                        this.props.history.push({ pathname:'/sharemedication', state: selectedRow });
+                        this.props.history.push({ pathname:'/createmedication', state: this.state.selectedRow });
                       }}
-                    >Share Medication
+                    >Create Medication
                     </button>
-                  </div>
-                  <br />
-                  <h2>ISSUE LIST</h2>
-                  <div style={styles.tablePanel}>
-                    <div>
-                      <div className="panel panel-default">
-                        <div className="panel-body">
-                          <BootstrapTable data={ medicalIssue } table striped hover>
-                            <TableHeaderColumn dataField='id' isKey={ true }>ID</TableHeaderColumn>
-                            <TableHeaderColumn dataField='title'>Title</TableHeaderColumn>
-                            <TableHeaderColumn dataField='type'>Type</TableHeaderColumn>
-                            <TableHeaderColumn dataField='startDate'>Start date</TableHeaderColumn>
-                            <TableHeaderColumn dataField='endDate'>End date</TableHeaderColumn>
-                        </BootstrapTable>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
@@ -150,3 +146,5 @@ export default class ShowList extends Component{
     )
   }
 }
+
+export default ViewMedicationList;

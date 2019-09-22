@@ -104,7 +104,7 @@ contract MedicalRecord {
     }
     return false;
   }
-  
+
   function getCandidateByAddress(address _candidate) public view returns(address, string memory) {
     address _candidateAddress = address(0); // empty address
     string memory _candidateRole = "";
@@ -347,8 +347,38 @@ contract MedicalRecord {
     patientIssueIndexes.push(patientIssueCount);
   }
 
+  function submitIssue(
+    string memory _title,
+    uint _beginDate,
+    uint _endDate,
+    string memory _occurance,
+    string memory _severity,
+    string memory _referredBy,
+    bool _isAllergyType,
+    address _patientAddress,
+    address _doctorAddress) public onlyPatientOrDoctor(msg.sender) returns(bool) {
+      uint lastMedicalProblemCount = medicalProblems.length;
+      createMedicalProblem(
+        _title,
+        _beginDate,
+        _endDate,
+        _occurance,
+        _severity,
+        _referredBy,
+        _isAllergyType,
+        _patientAddress
+      );
+      if(medicalProblems.length > lastMedicalProblemCount) {
+        lastMedicalProblemCount = medicalProblems.length;
+        uint _currentMedicalProblemId = medicalProblems[lastMedicalProblemCount-1].id;
+        createPatientIssue(_doctorAddress, medicalProblems[lastMedicalProblemCount-1].id);
+        if(patientIssues[_doctorAddress].medicalProblemIds[_currentMedicalProblemId] == _currentMedicalProblemId) return true;
+        return false;
+      }
+  }
+
   function createMedication(
-  string memory _name,
+    string memory _name,
     uint _beginDate,
     uint _endDate,
     string memory _dosage,
@@ -376,14 +406,39 @@ contract MedicalRecord {
     medicationIndexes.push(medicationCount);
   }
 
-  function prescribeMedication(address _patientAddress, uint _medicationId) public onlyDoctor(msg.sender) {
-    // Increment patient count
-    patientMedicationCount ++;
-    patientMedications[_patientAddress].id = patientMedicationCount;
-    patientMedications[_patientAddress].medicationIds[_medicationId] = _medicationId;
+  function prescribeMedication(
+    string memory _name,
+    uint _beginDate,
+    uint _endDate,
+    string memory _dosage,
+    string memory _referredBy,
+    string memory _hospName,
+    uint _medicalProblemId,
+    address _patientAddress) public onlyDoctor(msg.sender) returns(bool _result) {
+      _result = false;
+      uint lastMedicationCount = medicationIndexes.length;
+      createMedication(
+        _name,
+        _beginDate,
+        _endDate,
+        _dosage,
+        _referredBy,
+        _hospName,
+        _medicalProblemId
+      );
+      if(medicationIndexes.length > lastMedicationCount) {
+        lastMedicationCount = medicationIndexes.length;
+        uint _currentMedicationId = medications[lastMedicationCount].id;
+        // Increment patient count
+        patientMedicationCount ++;
+        patientMedications[_patientAddress].id = patientMedicationCount;
+        patientMedications[_patientAddress].medicationIds[_currentMedicationId] = _currentMedicationId;
 
-    // save index
-    patientMedicationIndexes.push(patientMedicationCount);
+        // save index
+        patientMedicationIndexes.push(patientMedicationCount);
+        _result = true;
+      }
+      return _result;
   }
 // onlyPatient(msg.sender)
   function shareMedicationTo(address _candidateAddress, uint _medicationId) public {

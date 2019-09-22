@@ -29,6 +29,8 @@ import PrescribeMedication from '../DoctorWork/code/prescribe.medication';
 import ShareMedication from '../DoctorWork/code/share.Medication';
 import Patient from '../reservation/code/patient.home';
 import PatientShowList from '../PatientWork/code/show.list';
+import ViewMedicationList from '../DoctorWork/code/viewMedicationList';
+import SearchMedication from '../DoctorWork/code/medicationSearch';
 
 class Routero extends Component{
   render(){
@@ -53,9 +55,11 @@ class Routero extends Component{
           <Route  path ='/career/list' component={ListCareer}/>
           <Route  path ='/home' component={SiteHome}/>
           <Route  path ='/menu/detail' component={MenuDetail}/>
-          <Route  path ='/add' component={Reservation}/>
+          <Route  path ='/doctor' component={Reservation}/>
           <Route  path ='/patient' component={Patient} />
           <Route  path ='/showlist' component={PatientShowList} />
+          <Route  path ='/viewMedication' component={ViewMedicationList} />
+          <Route  path ='/searchMedication' component={SearchMedication} />
           <Route  path ='/verifyemail' component={verifyEmail}/>
           <Route  path ='/' exact component={SiteHome}/>
           <Route  path ='*' component={pagenotfound} />

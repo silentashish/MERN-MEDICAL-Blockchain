@@ -1,4 +1,5 @@
 import React,{Component} from 'react';
+import PropTypes from 'prop-types';
 import {Form,Button,Row, Card,Col} from 'react-bootstrap';
 import '../style/medical.add.css';
 import Swal from 'sweetalert2';
@@ -21,13 +22,8 @@ var provider    = new Web3.providers.HttpProvider("http://localhost:7545");
 var Medical    = require('../../Ajson/MedicalRecord.json');
 
 
-class CreateMedication extends Component{
-  
+export default class CreateMedication extends Component{
   address="0xeb80652D6770084fDC4BD37e2c45bdbB9E1AdbaF";
-  state = {
-    account: '',
-    address:this.address
-  }
   Account = '';
 
   async loadBlockChain() {
@@ -44,16 +40,16 @@ class CreateMedication extends Component{
   }
 
   async addchain(e){
-    var d = this.state.address;
-    var doctor = this.state.doctoraddress;
     e.preventDefault();
-    console.log(this.state.startdate+" " +" "+this.state.enddate+" "+this.state.dosage+" "+this.state.hospital+" "+ this.state.referby+" "+" "+this.state.id);
-    var startdate=Date.parse(this.state.startdate);
-    var enddate = Date.parse(this.state.enddate);
+    console.log(this.state.medicine+" "+this.state.startDate + " " + this.state.endDate + " " + this.state.dosage + " " + this.state.hospital + " " + this.state.referby + " " + this.state.medicalProblemId);
+    const medicine = this.state.medicine;
+    var startdate=this.state.startDate;
+    var enddate = this.state.endDate;
     var dosage =this.state.dosage;
     var hospitalname = this.state.hospital;
     var referby=this.state.referby;
-    var id =this.state.id;
+    var id = this.state.medicalProblemId;
+    const patientAddress = this.state.patientAddress;
     const web3 = new Web3(Web3.givenProvider || 'http://localhost:8080')
     await web3.eth.getAccounts(function(error, accounts) {
       if (error) {
@@ -66,11 +62,11 @@ class CreateMedication extends Component{
       MetaCoinContract.setProvider(provider);
       MetaCoinContract.deployed().then(function(instance){
         proposalInstance = instance;
-          return proposalInstance.createMedication(startdate,enddate,dosage,referby,hospitalname,id,{from: account});
+          return proposalInstance.prescribeMedication(medicine,startdate,enddate,dosage,referby,hospitalname,id,patientAddress, {from: account});
       }).then(function(result) {
         console.log(result);
         Swal.fire({
-          title: 'Medication Added!',
+          title: 'Medication prescribed!',
           text: 'Do you want to continue',
           type: 'success',
           confirmButtonText: 'Yes'
@@ -95,9 +91,7 @@ class CreateMedication extends Component{
   constructor(props, context){
     // super(props);
     super(props, context);
-
     this.handleSelect = this.handleSelect.bind(this);
-
     this.state = {
       index: 0,
       direction: null,
@@ -108,14 +102,20 @@ class CreateMedication extends Component{
       errorMessage:'Error SomeWhere',
       startDate: new Date(),
       time: '10:00',
-      endDate: new Date()
+      endDate: new Date(),
+      hospital: '',
+      medicine: '',
+      account: '',
+      medicalProblemId: (typeof(props.location.state) === 'undefined'
+        ? 0 : props.location.state.id),
+      patientAddress: (typeof (props.location.state) === 'undefined' ?
+        0 : props.location.state.patientAddress),
+      address: this.address,
     }
 
     //this.getStat = this.getStat.bind(this);
     this.login = this.login.bind(this);
     this.handleReserve = this.handleReserve.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.endhandleChange = this.endhandleChange.bind(this);
   }
 
   handleReserve = (e) => {
@@ -131,13 +131,8 @@ class CreateMedication extends Component{
 
   onChange = time => this.setState({ time })
 
-  handleChange(date) {
-    this.setState({startdate:date});
-  }
-
-  endhandleChange(date) {
-    this.setState({enddate:date});
-  }
+  handleChange = date => this.setState({ startDate: Date.parse(date) });
+  endHandleChange = date => this.setState({ endDate: Date.parse(date) });
 
   login(){
     console.log('this is login function')
@@ -167,9 +162,6 @@ class CreateMedication extends Component{
   }
   
   render(){
-
-    const { index, direction } = this.state;
-
     return(
       <div className='container-fluid bg  dev'>
         <div className='bcc dev'>
@@ -196,6 +188,13 @@ class CreateMedication extends Component{
               <div bg className='boxe dev' >
             <Form className="reserveform">
               <Form.Group controlId="formBasicPassword">
+                <Form.Label>Medicine Name</Form.Label>
+                <Form.Control type="text" placeholder="medicine name" onChange={(event)=> {
+                  this.setState({medicine: event.target.value,isError:false});
+                }} />
+              </Form.Group>
+
+              <Form.Group controlId="formBasicPassword">
                 <Form.Label>Hospital Name</Form.Label>
                 <Form.Control type="text" placeholder="hospital name" onChange={(event)=> {
                   this.setState({hospital: event.target.value,isError:false});
@@ -213,8 +212,8 @@ class CreateMedication extends Component{
 
               <Form.Group controlId="formBasicPassword">
                 <Form.Label>Medical Problem ID</Form.Label>
-                <Form.Control type="text" placeholder="id" onChange={(event)=> {
-                  this.setState({id: event.target.value,isError:false});
+                <Form.Control type="text" placeholder="id" value={this.state.medicalProblemId || ''} onChange={(event)=> {
+                  this.setState({medicalProblemId: event.target.value,isError:false});
                 }} />
               </Form.Group>
                 
@@ -226,7 +225,7 @@ class CreateMedication extends Component{
                     {/* <input type="email" class="form-control" id="email" placeholder="Enter email" name="email"/>   */}
                     <DatePicker
                       id='date'
-                      selected={this.state.startdate}
+                      selected={this.state.startDate}
                       onChange={this.handleChange}
                     />
                   </Form.Group> 
@@ -238,8 +237,8 @@ class CreateMedication extends Component{
                     {/* <input type="email" class="form-control" id="email" placeholder="Enter email" name="email"/>   */}
                     <DatePicker
                       id='date'
-                      selected={this.state.enddate}
-                      onChange={this.endhandleChange}
+                      selected={this.state.endDate}
+                      onChange={this.endHandleChange}
                     />
                   </Form.Group>
                 </Col>
@@ -275,4 +274,13 @@ class CreateMedication extends Component{
   }
 }
 
-export default CreateMedication;
+CreateMedication.defaultProps = {
+  state: {}
+};
+
+CreateMedication.propTypes = {
+  state: PropTypes.shape({
+    id: PropTypes.number,
+    patientAddress: PropTypes.string,
+  })
+};

@@ -219,13 +219,13 @@ class Reservation extends Component{
             <div className='col-md-12 col-sm-12 dev'>
               <div className='bc dev'>
                 <div className='intro dev'>
-                  <div><h3 style={{ color: '#fff' }}>{currCandidateAddress ? headerLabel : ''}</h3></div>
+                  <div><h3 style={{ color: '#fff' }}>{currCandidateType !== '' ? headerLabel : ''}</h3></div>
                   <div className='flex-container'>
                       <div onClick={()=>this.props.history.push("/addproblem")}>
                         <img className='inim' src={require('../../Img/pill.png')} />
                         <br></br>
                         <br></br>
-                        <h5>Add Medical Problem</h5>
+                        <h5>Submit Issue</h5>
                       </div>
 
                       <div onClick={()=>this.props.history.push("/sharemedication")}> 

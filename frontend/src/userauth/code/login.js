@@ -83,7 +83,7 @@ class Login extends Component{
               }
 
               if(responseJson.data.role==='Doctor'){
-                this.props.history.push({pathname:'/add',state:{value:this.state.email}})
+                this.props.history.push({pathname:'/doctor',state:{value:this.state.email}})
 
               }
 

@@ -1,29 +1,28 @@
-import React,{Component} from 'react';
-import {Form,Button,Row, Card,Col} from 'react-bootstrap';
+import React,{ Component } from 'react';
+import PropTypes from 'prop-types';
+import { Form, Button } from 'react-bootstrap';
 import '../style/medical.add.css';
 import Swal from 'sweetalert2';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import 'rc-time-picker/assets/index.css';
-import TimePicker from 'rc-time-picker';
-import moment from 'moment';
 import Web3 from 'web3';
 import contracts from 'truffle-contract';
-import path from 'path';
-
-const format = 'h:mm a';
-
-const now = moment().hour(0).minute(0);
-
 
 var provider    = new Web3.providers.HttpProvider("http://localhost:7545");
 var Medical    = require('../../Ajson/MedicalRecord.json');
 
+export default class ShareMedication extends Component{
+  state = {
+    account: '',
+    doctorAddress: '',
+    medicalProblemId: (typeof (this.props.location.state) === 'undefined' ?
+      0 : this.props.location.state.id)
+  };
 
-class MedicalPerson extends Component{
-  state = {account: ''}
-  Account = '';
+  async componentDidMount() {
+    this.loadBlockChain()
+  }
 
   async loadBlockChain() {
     const web3 = new Web3(Web3.givenProvider || 'http://localhost:7545')
@@ -39,31 +38,22 @@ class MedicalPerson extends Component{
   }
 
   async addchain(e){
-    var value;
-    var location;
     e.preventDefault();
-    
-    location=this.state.location;
-    var id =this.state.id;
-    // console.log("value are"+this.state.location+" "+value);
-    
+    const { doctorAddress, medicalProblemId } = this.state;    
     const web3 = new Web3(Web3.givenProvider || 'http://localhost:8080')
     await web3.eth.getAccounts(function(error, accounts) {
       if (error) {
-        console.log("from this" + error);
-        console.log("from this" + accounts);
+        console.log(`Error from this ${accounts[0]}. Details: ${error}`);
       }
-      var account = accounts[0];
-
-      var proposalInstance;
-      var MetaCoinContract = contracts(Medical);
+      let proposalInstance;
+      let MetaCoinContract = contracts(Medical);
       MetaCoinContract.setProvider(provider);
       MetaCoinContract.deployed().then(function(instance){
         proposalInstance = instance;
-          return proposalInstance.shareMedicationTo(location,id,{from:"0xeb80652D6770084fDC4BD37e2c45bdbB9E1AdbaF" });
+          return proposalInstance.shareMedicationTo(doctorAddress, medicalProblemId, { from: accounts[0]});
       }).then(function(result) {
         Swal.fire({
-            title: 'User is Added!',
+            title: 'Prescription shared!',
             text: 'Do you want to continue',
             type: 'success',
             confirmButtonText: 'Yes'
@@ -75,55 +65,9 @@ class MedicalPerson extends Component{
     }
     )}
 
-  handleSelect(selectedIndex, e) {
-    this.setState({
-      index: selectedIndex,
-      direction: e.direction,
-    });
-  }
-
-  componentDidMount() {
-    this.loadBlockChain()
-  }
-
-  constructor(props, context){
-    // super(props);
-    super(props, context);
-
-    this.handleSelect = this.handleSelect.bind(this);
-
-    this.state = {
-      index: 0,
-      direction: null,
-      email:'',
-      username:'',
-      password: '',
-      isError:false,
-      fullname:'',
-      confirmpassword:'',
-      branch:'',
-      errorMessage:'Error SomeWhere',
-      startDate: new Date(),
-      time: '10:00'
-    }
-
-    //this.getStat = this.getStat.bind(this);
-    this.login = this.login.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-
   onChange = time => this.setState({ time })
 
-  handleChange(date) {
-    this.setState({date:date});
-  }
-
-  login(){
-    console.log('this is login function')
-  }
-
-    onClick = () => {
+  onClick = () => {
     //this.props.history.push("/home");
     Swal.fire({
           title: 'Reservation Added!',
@@ -147,9 +91,6 @@ class MedicalPerson extends Component{
   }
 
   render(){
-
-    const { index, direction } = this.state;
-
     return(
       <div className='container-fluid bg  dev'>
         <div className='bcc dev'>
@@ -173,27 +114,26 @@ class MedicalPerson extends Component{
 
             <div className='col-md-6 col-sm-12 dev'>
               <div className='bc dev'>
-              <div bg className='boxe dev' >
+              <div className='boxe dev' >
             <Form className="reserveform">
               <Form.Group controlId="formBasicPassword">
                 <Form.Label>Enter Address</Form.Label>
-                <Form.Control type="text" placeholder="Enter your address" onChange={(event)=> {
-                  this.setState({location: event.target.value,isError:false});
+                <Form.Control type="text" placeholder="Share address" onChange={(event)=> {
+                  this.setState({doctorAddress: event.target.value,isError:false});
                 }} />
               </Form.Group>
 
 
               <Form.Group controlId="formBasicPassword">
                 <Form.Label>Medical Problem ID</Form.Label>
-                <Form.Control type="text" placeholder="Enter id here" onChange={(event)=> {
-                  this.setState({id: event.target.value,isError:false});
+                <Form.Control type="text" placeholder="Medical problem id" value={this.state.medicalProblemId || 0} onChange={(event)=> {
+                  this.setState({medicalProblemId: event.target.value,isError:false});
                 }} />
               </Form.Group>
 
               <Button className='submitbotton' variant="primary" type="/submit" onClick={(e)=>this.addchain(e)}>
-                ADD NEW USER
+                Share
               </Button>
-                {/* <h6 className='nextbutton'>Already a member? Login</h6> */}
             </Form>
           </div>
 
@@ -201,10 +141,18 @@ class MedicalPerson extends Component{
             </div>
           </div>
         </div>
-      </div>
-        
+      </div> 
     )
   }
 }
 
-export default MedicalPerson;
+ShareMedication.defaultProps = {
+  state: {}
+};
+
+ShareMedication.propTypes = {
+  state: PropTypes.shape({
+    id: PropTypes.number,
+    doctorAddress: PropTypes.string,
+  })
+};
