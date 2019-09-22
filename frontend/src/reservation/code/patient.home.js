@@ -228,12 +228,12 @@ class Reservation extends Component{
                         <h5>Submit Issue</h5>
                       </div>
 
-                      <div onClick={()=>this.props.history.push("/sharemedication")}> 
+                      {/* <div onClick={()=>this.props.history.push("/sharemedication")}> 
                         <img className='inim' src={require('../../Img/healthcare.png')} />
                         <br></br>
                         <br></br>
                         <h5>Share Medication</h5>
-                      </div>
+                      </div> */}
 
                       <div onClick={()=>this.props.history.push("/showlist")}> 
                         <img className='inim' src={require('../../Img/medicalReport.png')} />
